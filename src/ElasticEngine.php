@@ -230,6 +230,8 @@ class ElasticEngine extends Engine
         $this
             ->buildSearchQueryPayloadCollection($builder)
             ->each(function ($payload) use (&$count) {
+                unset($payload['body']['track_scores']);
+                
                 $result = ElasticClient::count($payload);
 
                 $count = $result['count'];
