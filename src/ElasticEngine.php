@@ -174,6 +174,8 @@ class ElasticEngine extends Engine
                 }
             });
 
+        $results['scopes'] = $builder->scopes;
+
         return $results;
     }
 
@@ -289,9 +291,17 @@ class ElasticEngine extends Engine
 
         $builder = $model->usesSoftDelete() ? $model->withTrashed() : $model->newQuery();
 
+        $builder->select($columns);
+
+        foreach ($results['scopes'] as $scope) {
+            $method = $scope['method'];
+            $parameters = $scope['parameters'];
+            $builder->$method(...$parameters);
+        }
+
         $models = $builder
             ->whereIn($primaryKey, $ids)
-            ->get($columns)
+            ->get()
             ->keyBy($primaryKey);
 
         return Collection::make($results['hits']['hits'])

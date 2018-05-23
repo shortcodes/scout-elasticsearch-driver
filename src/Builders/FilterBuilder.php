@@ -57,6 +57,11 @@ class FilterBuilder extends Builder
     public $select = [];
 
     /**
+     * @var array
+     */
+    public $scopes = [];
+
+    /**
      * @param Model $model
      * @param callable|null $callback
      * @param bool $softDelete
@@ -896,5 +901,27 @@ class FilterBuilder extends Builder
         return tap($this->withTrashed(), function () {
             $this->wheres['must'][] = ['term' => ['__soft_deleted' => 1]];
         });
+    }
+
+    /**
+     * @param $method
+     * @param $parameters
+     * @return $this
+     */
+    function __call($method, $parameters)
+    {
+        if (method_exists($this, $method)) {
+            return $this->$method(...$parameters);
+        } else {
+            // Check for model scopes
+            $is_scope = "scope" . ucfirst($method);
+            if (method_exists($this->model, $is_scope)) {
+                $this->scopes[] = [
+                    'method' => $method,
+                    'parameters' => $parameters
+                ];
+                return $this;
+            }
+        }
     }
 }
