@@ -19,12 +19,12 @@ class FilterBuilder extends Builder
     /**
      * @var array|string
      */
-    public $with;
+    public $with = [];
 
     /**
      * @var array
      */
-    public $aggregates;
+    public $aggregates = [];
 
     /**
      * @var array
@@ -34,12 +34,12 @@ class FilterBuilder extends Builder
     /**
      * @var array
      */
-    public $suggesters;
+    public $suggesters = [];
 
     /**
      * @var array
      */
-    public $highlighter;
+    public $highlighter = [];
 
     /**
      * @var int
@@ -696,7 +696,11 @@ class FilterBuilder extends Builder
      */
     public function with($relations)
     {
-        $this->with = $relations;
+        if (is_array($relations)) {
+            $this->with = array_merge($this->with, $relations);
+        } else {
+            $this->with[] = $relations;
+        }
 
         return $this;
     }
