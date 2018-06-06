@@ -26,7 +26,7 @@ class ScoutElasticServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../config/scout.php' => config_path('scout.php'),
+            __DIR__ . '/../config/scout_elastic.php' => config_path('scout_elastic.php'),
         ]);
 
         $this->commands([
