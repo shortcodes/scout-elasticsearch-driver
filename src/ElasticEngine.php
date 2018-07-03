@@ -278,6 +278,7 @@ class ElasticEngine extends Engine
         }
 
         $primaryKey = $model->getKeyName();
+        $keyType = $model->getKeyType();
 
         $columns = array_get($results, '_payload.body._source');
 
@@ -288,6 +289,10 @@ class ElasticEngine extends Engine
         }
 
         $ids = $this->mapIds($results);
+
+        if ($keyType === 'int' || $keyType === 'integer') {
+            $ids = array_map('intval', $ids);
+        }
 
         $builder = $model->usesSoftDelete() ? $model->withTrashed() : $model->newQuery();
 
