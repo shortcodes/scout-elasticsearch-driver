@@ -296,7 +296,7 @@ class ElasticEngine extends Engine
 
         $builder = $model->usesSoftDelete() ? $model->withTrashed() : $model->newQuery();
 
-        $builder->select($columns);
+        //$builder->select($columns);
 
         foreach ($results['scopes'] as $scope) {
             $method = $scope['method'];
