@@ -15,6 +15,7 @@ use ScoutElastic\Console\ElasticMigrateCommand;
 use ScoutElastic\Console\ElasticUpdateMappingCommand;
 
 use ScoutElastic\Console\IndexConfiguratorMakeCommand;
+use ScoutElastic\Console\ReindexSearchCommand;
 use ScoutElastic\Console\SearchableModelMakeCommand;
 use ScoutElastic\Console\SearchRuleMakeCommand;
 use ScoutElastic\Console\AggregateRuleMakeCommand;
@@ -43,7 +44,8 @@ class ScoutElasticServiceProvider extends ServiceProvider
             ElasticIndexUpdateCommand::class,
             ElasticIndexDropCommand::class,
             ElasticUpdateMappingCommand::class,
-            ElasticMigrateCommand::class
+            ElasticMigrateCommand::class,
+            ReindexSearchCommand::class
         ]);
 
         require_once __DIR__.'/Macros.php';
