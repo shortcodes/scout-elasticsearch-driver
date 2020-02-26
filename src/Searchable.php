@@ -128,9 +128,9 @@ trait Searchable
     /**
      * @return bool
      */
-    public function usesSoftDelete()
+    public static function usesSoftDelete()
     {
-        return in_array(SoftDeletes::class, class_uses_recursive($this));
+        return in_array(SoftDeletes::class, class_uses_recursive(get_called_class()));
     }
 
     /**

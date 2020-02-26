@@ -2,13 +2,13 @@
 
 namespace ScoutElastic;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Artisan;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
 use ScoutElastic\Builders\SearchBuilder;
 use ScoutElastic\Facades\ElasticClient;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use ScoutElastic\Indexers\IndexerInterface;
 use ScoutElastic\Payloads\TypePayload;
 use stdClass;
@@ -233,7 +233,7 @@ class ElasticEngine extends Engine
             ->buildSearchQueryPayloadCollection($builder)
             ->each(function ($payload) use (&$count) {
                 unset($payload['body']['track_scores']);
-                
+
                 $result = ElasticClient::count($payload);
 
                 $count = $result['count'];
@@ -271,7 +271,7 @@ class ElasticEngine extends Engine
     /**
      * @inheritdoc
      */
-    public function map($results, $model)
+    public function map(Builder $builder, $results, $model)
     {
         if ($this->getTotalCount($results) == 0) {
             return Collection::make();
@@ -337,5 +337,10 @@ class ElasticEngine extends Engine
     public function getTotalCount($results)
     {
         return $results['hits']['total'];
+    }
+
+    public function flush($model)
+    {
+
     }
 }
