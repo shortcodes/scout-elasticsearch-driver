@@ -4,6 +4,7 @@ namespace ScoutElastic;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Laravel\Scout\Builder;
 use Laravel\Scout\Engines\Engine;
@@ -265,7 +266,7 @@ class ElasticEngine extends Engine
      */
     public function mapIds($results)
     {
-        return array_pluck($results['hits']['hits'], '_id');
+        return Arr::pluck($results['hits']['hits'], '_id');
     }
 
     /**
@@ -280,7 +281,7 @@ class ElasticEngine extends Engine
         $primaryKey = $model->getKeyName();
         $keyType = $model->getKeyType();
 
-        $columns = array_get($results, '_payload.body._source');
+        $columns = Arr::get($results, '_payload.body._source');
 
         if (is_null($columns)) {
             $columns = ['*'];

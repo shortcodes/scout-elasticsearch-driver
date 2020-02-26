@@ -308,7 +308,7 @@ class FilterBuilder extends Builder
      * @param callable|null $default
      * @return $this
      */
-    public function when($value, callable $callback, callable $default = null)
+    public function when($value, $callback, $default = null)
     {
         if ($value) {
             return $callback($this);
