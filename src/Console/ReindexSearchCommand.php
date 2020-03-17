@@ -47,8 +47,13 @@ class ReindexSearchCommand extends Command
             'model' => $searchableModel
         ]);
 
+        $startTime = microtime(true);
+
         $this->call('scout:import', [
             'model' => $searchableModel
         ]);
+
+        $this->line('Indexed in ' . (microtime(true) - $startTime) . ' seconds');
+
     }
 }
