@@ -3,6 +3,7 @@
 namespace ScoutElastic;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Arr;
 use Laravel\Scout\Searchable as ScoutSearchable;
 use ScoutElastic\Builders\FilterBuilder;
 use ScoutElastic\Builders\SearchBuilder;
@@ -66,7 +67,7 @@ trait Searchable
         $mapping = $this->mapping ?? [];
 
         if ($this->usesSoftDelete() && config('scout.soft_delete', false)) {
-            array_set($mapping, 'properties.__soft_deleted', ['type' => 'integer']);
+            Arr::set($mapping, 'properties.__soft_deleted', ['type' => 'integer']);
         }
 
         return $mapping;

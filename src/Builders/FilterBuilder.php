@@ -3,6 +3,7 @@
 namespace ScoutElastic\Builders;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Laravel\Scout\Builder;
 
 class FilterBuilder extends Builder
@@ -376,7 +377,7 @@ class FilterBuilder extends Builder
 
         return $this;
     }
-    
+
     /**
      * @see https://www.elastic.co/guide/en/elasticsearch/guide/current/querying-geo-shapes.html Querying Geo Shapes
      *
@@ -400,7 +401,7 @@ class FilterBuilder extends Builder
     /**
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-term-query.html Term query
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-range-query.html Range query
-     * 
+     *
      * Supported operators are =, &gt;, &lt;, &gt;=, &lt;=;
      * @param string $field Field name
      * @param mixed $value Scalar value or an array
@@ -746,7 +747,7 @@ class FilterBuilder extends Builder
         if ($this instanceof SearchBuilder) {
             $this->take($size);
             $payloadCollection = [];
-            
+
             $suggestRules = $this->model->getSuggestRules();
 
             foreach ($suggestRules as $rule) {
@@ -759,7 +760,7 @@ class FilterBuilder extends Builder
             }
 
             $this->suggesters = array_reduce($payloadCollection, 'array_merge', []);
-            
+
             return $this->engine()->search($this);
         }
     }
@@ -773,7 +774,7 @@ class FilterBuilder extends Builder
     {
         if ($this instanceof SearchBuilder) {
             $payloadCollection = [];
-            
+
             $highlightRules = $this->model->getHighlightRules();
 
             foreach ($highlightRules as $rule) {
@@ -786,7 +787,7 @@ class FilterBuilder extends Builder
             }
 
             $this->highlighters = array_reduce($payloadCollection, 'array_merge', []);
-            
+
             return $this->engine()->search($this);
         }
     }
@@ -847,7 +848,7 @@ class FilterBuilder extends Builder
 
     /**
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-collapse.html
-     * 
+     *
      * @param string $field
      * @return $this
      */
@@ -889,7 +890,7 @@ class FilterBuilder extends Builder
     {
         $this->wheres['must'] = collect($this->wheres['must'])
             ->filter(function ($item) {
-                return array_get($item, 'term.__soft_deleted') !== 0;
+                return Arr::get($item, 'term.__soft_deleted') !== 0;
             })
             ->values()
             ->all();
