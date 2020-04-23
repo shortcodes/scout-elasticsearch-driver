@@ -105,7 +105,7 @@ trait Searchable
      */
     public static function search($query, $callback = null)
     {
-        $softDelete = config('scout.soft_delete', false);
+        $softDelete = config('scout.soft_delete', false) && in_array(SoftDeletes::class, class_uses_recursive(new static));
 
         if ($query == '*') {
             return new FilterBuilder(new static, $callback, $softDelete);
