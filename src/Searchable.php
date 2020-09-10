@@ -149,4 +149,19 @@ trait Searchable
     {
         return $this->highlight;
     }
+    
+    public static function makeAllSearchable()
+    {
+        $self = new static;
+
+        $softDelete = static::usesSoftDelete() && config('scout.soft_delete', false);
+
+        $self->newQuery()
+            ->with($self->withSearchable ?? $self->with ?? [])
+            ->when($softDelete, function ($query) {
+                $query->withTrashed();
+            })
+            ->orderBy($self->getKeyName())
+            ->searchable();
+    }
 }
